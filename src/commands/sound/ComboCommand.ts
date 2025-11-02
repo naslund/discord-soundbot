@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import QueueItem from "~/queue/QueueItem";
 import localize from "~/util/i18n/localize";
@@ -15,7 +15,7 @@ export class ComboCommand extends QueueCommand {
     if (!message.member) return;
 
     if (params.length < this.numberOfParameters) {
-      message.channel.send(this.usage);
+      (message.channel as TextChannel).send(this.usage);
       return;
     }
 

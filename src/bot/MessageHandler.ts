@@ -1,6 +1,6 @@
 import "../discord/Message";
 
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import userHasElevatedRole from "~/commands/util/userHasElevatedRole";
 import { config } from "~/util/Container";
@@ -39,7 +39,7 @@ export default class MessageHandler {
     const commandToRun = this.commands.get(command);
 
     if (commandToRun.elevated && !userHasElevatedRole(message.member)) {
-      message.channel.send(localize.t("errors.unauthorized"));
+    (message.channel as TextChannel).send(localize.t("errors.unauthorized"));
       return;
     }
 

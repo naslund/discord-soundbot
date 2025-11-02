@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import { FormatError, ValidationError } from "~/util/Errors";
 import localize from "~/util/i18n/localize";
@@ -14,11 +14,11 @@ export default abstract class BaseDownloader {
 
   protected handleError(message: Message, error: Error) {
     if (HANDLED_ERRORS.includes(error.name)) {
-      message.channel.send(error.message);
+      (message.channel as TextChannel).send(error.message);
       return;
     }
 
     console.error(error);
-    message.channel.send(localize.t("errors.unspecific"));
+    (message.channel as TextChannel).send(localize.t("errors.unspecific"));
   }
 }

@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import * as ignoreList from "~/util/db/IgnoreList";
 import localize from "~/util/i18n/localize";
@@ -13,14 +13,14 @@ export class IgnoreCommand extends Command {
   public run(message: Message) {
     const { users } = message.mentions;
     if (users.size < 1) {
-      message.channel.send(this.usage);
-      message.channel.send(localize.t("helpers.userFinder.error"));
+      (message.channel as TextChannel).send(this.usage);
+      (message.channel as TextChannel).send(localize.t("helpers.userFinder.error"));
       return;
     }
 
     users.forEach((user) => {
       ignoreList.add(user.id);
-      message.channel.send(localize.t("commands.ignore.add", { user: user.username }));
+      (message.channel as TextChannel).send(localize.t("commands.ignore.add", { user: user.username }));
     });
   }
 }

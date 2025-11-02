@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import { existsSound, getPathForSound } from "~/util/SoundUtil";
 import * as sounds from "~/util/db/Sounds";
@@ -15,14 +15,14 @@ export class RemoveCommand extends Command {
 
   public run(message: Message, params: string[]) {
     if (params.length !== this.numberOfParameters) {
-      message.channel.send(this.usage);
+      (message.channel as TextChannel).send(this.usage);
       return;
     }
 
     // biome-ignore lint/style/noNonNullAssertion: verified params above
     const sound = params.shift()!;
     if (!existsSound(sound)) {
-      message.channel.send(localize.t("commands.remove.notFound", { sound }));
+      (message.channel as TextChannel).send(localize.t("commands.remove.notFound", { sound }));
       return;
     }
 
@@ -30,6 +30,6 @@ export class RemoveCommand extends Command {
     fs.unlinkSync(file);
     sounds.remove(sound);
 
-    message.channel.send(localize.t("commands.remove.success", { sound }));
+    (message.channel as TextChannel).send(localize.t("commands.remove.success", { sound }));
   }
 }

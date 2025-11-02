@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import util from "node:util";
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 
 import { FormatError } from "~/util/Errors";
@@ -24,7 +24,7 @@ export class ModifyCommand extends Command {
 
     const options = MODIFIER_OPTIONS[modifier];
     if (!options) {
-      message.channel.send(localize.t("commands.modify.notFound", { modifier }));
+      (message.channel as TextChannel).send(localize.t("commands.modify.notFound", { modifier }));
       return;
     }
 
@@ -32,7 +32,7 @@ export class ModifyCommand extends Command {
       commandParams.length < options.parameters.min ||
       commandParams.length > options.parameters.max
     ) {
-      message.channel.send(options.usage);
+      (message.channel as TextChannel).send(options.usage);
       return;
     }
 
@@ -41,7 +41,7 @@ export class ModifyCommand extends Command {
     try {
       await this.performModification(fileInfo, modifier, commandParams);
       await this.replace(fileInfo);
-      message.channel.send(localize.t("commands.modify.success", { modifier, sound }));
+      (message.channel as TextChannel).send(localize.t("commands.modify.success", { modifier, sound }));
     } catch (error) {
       this.handleError(message, error as Error, { modifier, sound });
     }
@@ -105,10 +105,10 @@ export class ModifyCommand extends Command {
 
   private handleError(message: Message, error: Error, { modifier, sound }: ErrorParams) {
     if (error instanceof FormatError) {
-      message.channel.send(error.message);
+      (message.channel as TextChannel).send(error.message);
       return;
     }
 
-    message.channel.send(localize.t("commands.modify.error", { modifier, sound }));
+    (message.channel as TextChannel).send(localize.t("commands.modify.error", { modifier, sound }));
   }
 }

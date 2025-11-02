@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import { getSounds } from "~/util/SoundUtil";
 import * as sounds from "~/util/db/Sounds";
@@ -13,14 +13,14 @@ export class SearchCommand extends Command {
 
   public run(message: Message, params: string[]) {
     if (params.length !== this.numberOfParameters) {
-      message.channel.send(this.usage);
+      (message.channel as TextChannel).send(this.usage);
       return;
     }
 
     // biome-ignore lint/style/noNonNullAssertion: verified params above
     const tag = params.shift()!;
     const results = getSounds().filter((sound) => sound.includes(tag));
-    sounds.withTag(tag).forEach((sound) => results.push(sound));
+    sounds.withTag(tag).forEach((sound: string) => results.push(sound));
 
     if (!results.length) {
       message.author.send(localize.t("commands.search.notFound"));

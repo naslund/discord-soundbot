@@ -9,7 +9,7 @@ import {
   createAudioResource,
   joinVoiceChannel,
 } from "@discordjs/voice";
-import { DiscordAPIError, type Message } from "discord.js";
+import { DiscordAPIError, TextChannel, type Message } from "discord.js";
 
 import type Config from "~/config/Config";
 import { getPathForSound } from "~/util/SoundUtil";
@@ -152,7 +152,7 @@ export default class SoundQueue {
       error.code === "VOICE_JOIN_CHANNEL" &&
       this.currentSound?.message
     ) {
-      await this.currentSound.message.channel.send(localize.t("errors.permissions"));
+      await (this.currentSound.message.channel as TextChannel).send(localize.t("errors.permissions"));
       process.exit();
     }
 

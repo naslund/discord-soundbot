@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 import fs from "node:fs";
 
 import { getPathForSound, getSoundsWithExtension } from "~/util/SoundUtil";
@@ -10,7 +10,7 @@ export class LastAddedCommand extends Command {
   private readonly amount = 5;
 
   public run(message: Message) {
-    message.channel.send(["```", ...this.getLastAddedSounds(), "```"].join("\n"));
+    (message.channel as TextChannel).send(["```", ...this.getLastAddedSounds(), "```"].join("\n"));
   }
 
   private getLastAddedSounds() {

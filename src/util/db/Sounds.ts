@@ -1,7 +1,7 @@
 import connection from "./connection";
 import Sound from "./models/Sound";
 
-const all = () => connection.get("sounds");
+const all = () => connection.get("sounds") as any;
 export const findByName = (name: string) => all().find({ name });
 
 const addSingleTag = (sound: string, tag: string) => {

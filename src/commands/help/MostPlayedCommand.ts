@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import type Sound from "~/util/db/models/Sound";
 import * as soundsDb from "~/util/db/Sounds";
@@ -12,15 +12,15 @@ export class MostPlayedCommand extends Command {
     const formattedMessage = this.getFormattedMessage();
     if (!formattedMessage) return;
 
-    message.channel.send(formattedMessage);
+    (message.channel as TextChannel).send(formattedMessage);
   }
 
   private getFormattedMessage() {
     const sounds = soundsDb.mostPlayed();
     if (!sounds.length) return undefined;
 
-    const longestSound = this.findLongestWord(sounds.map((sound) => sound.name));
-    const longestCount = this.findLongestWord(sounds.map((sound) => String(sound.count)));
+    const longestSound = this.findLongestWord(sounds.map((sound: { name: any; }) => sound.name));
+    const longestCount = this.findLongestWord(sounds.map((sound: { count: any; }) => String(sound.count)));
     return this.formatSounds(sounds, longestSound.length, longestCount.length);
   }
 

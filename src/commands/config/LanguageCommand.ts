@@ -1,4 +1,4 @@
-import { Collection, EmbedBuilder, type Message } from "discord.js";
+import { Collection, EmbedBuilder, TextChannel, type Message } from "discord.js";
 
 import localize from "~/util/i18n/localize";
 
@@ -25,14 +25,14 @@ export class LanguageCommand extends ConfigCommand {
       this.getLanguageMap().findKey((value, key) => [key, value].includes(chosenLanguage));
 
     if (!language) {
-      message.channel.send({ embeds: [this.help()] });
+      (message.channel as TextChannel).send({ embeds: [this.help()] });
       return;
     }
 
     this.config.set("language", [language]);
     localize.setLocale(language);
 
-    message.channel.send(
+    (message.channel as TextChannel).send(
       localize.t("commands.lang.success", { flag: FLAGS[language], language: chosenLanguage })
     );
   }

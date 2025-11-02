@@ -11,9 +11,7 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-
-    "typeRoots": ["node_modules/@types", "src/types"],
-
+    "types": ["node", "jest"],
     "strict": true
   },
   "include": ["src/**/*", "bin/**/*"],

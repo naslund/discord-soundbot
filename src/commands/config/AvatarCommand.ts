@@ -1,4 +1,4 @@
-import type { ClientUser, Message } from "discord.js";
+import type { ClientUser, Message, TextChannel } from "discord.js";
 
 import localize from "~/util/i18n/localize";
 
@@ -29,25 +29,25 @@ export class AvatarCommand extends ConfigCommand implements UserCommand {
     }
 
     if (message.attachments.size !== 1) {
-      message.channel.send(this.usage);
+      (message.channel as TextChannel).send(this.usage);
       return;
     }
 
     // biome-ignore lint/style/noNonNullAssertion: ensured exactly one attachment above
     this.user.setAvatar(message.attachments.first()!.url).catch(() => {
-      message.channel.send(localize.t("commands.avatar.errors.tooFast"));
+      (message.channel as TextChannel).send(localize.t("commands.avatar.errors.tooFast"));
     });
   }
 
   private listAvatar(message: Message) {
     if (!this.user.avatarURL()) {
-      message.channel.send(
+      (message.channel as TextChannel).send(
         localize.t("commands.avatar.errors.noAvatar", { prefix: this.config.prefix })
       );
       return;
     }
 
-    message.channel.send(
+    (message.channel as TextChannel).send(
       localize.t("commands.avatar.url", {
         url: this.user.displayAvatarURL({ size: 256 }),
       })

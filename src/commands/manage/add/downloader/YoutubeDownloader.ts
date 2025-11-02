@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "node:fs";
 import util from "node:util";
@@ -30,7 +30,7 @@ export default class YoutubeDownloader extends BaseDownloader {
     try {
       this.validator.validate(soundName, url);
       await this.addSound({ end, soundName, start, url });
-      message.channel.send(localize.t("commands.add.success", { name: soundName }));
+      (message.channel as TextChannel).send(localize.t("commands.add.success", { name: soundName }));
     } catch (error) {
       this.handleError(message, error as Error);
     }
@@ -49,7 +49,6 @@ export default class YoutubeDownloader extends BaseDownloader {
     return new Promise((resolve, reject) => {
       ytdl(url, { filter: "audio", quality: "highestaudio" })
         .pipe(fs.createWriteStream("tmp.mp4"))
-        .on("finish", resolve)
         .on("error", reject);
     });
   }

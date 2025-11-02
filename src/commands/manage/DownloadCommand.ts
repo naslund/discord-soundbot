@@ -1,4 +1,4 @@
-import { AttachmentBuilder, type Message } from "discord.js";
+import { AttachmentBuilder, TextChannel, type Message } from "discord.js";
 
 import { existsSound, getPathForSound } from "~/util/SoundUtil";
 
@@ -11,7 +11,7 @@ export class DownloadCommand extends Command {
 
   public run(message: Message, params: string[]) {
     if (params.length !== this.numberOfParameters) {
-      message.channel.send(this.usage);
+      (message.channel as TextChannel).send(this.usage);
       return;
     }
 
@@ -19,6 +19,6 @@ export class DownloadCommand extends Command {
     if (!existsSound(sound)) return;
 
     const attachment = new AttachmentBuilder(getPathForSound(sound));
-    message.channel.send({ files: [attachment] });
+    (message.channel as TextChannel).send({ files: [attachment] });
   }
 }

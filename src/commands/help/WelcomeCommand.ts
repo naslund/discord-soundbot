@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import localize from "~/util/i18n/localize";
 
@@ -8,6 +8,6 @@ export class WelcomeCommand extends ConfigCommand {
   public readonly triggers = ["welcome"];
 
   public run(message: Message) {
-    message.channel.send(localize.t("welcome", { prefix: this.config.prefix }));
+    (message.channel as TextChannel).send(localize.t("welcome", { prefix: this.config.prefix }));
   }
 }

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import type { IncomingMessage } from "node:http";
 import https from "node:https";
-import type { Attachment, Message } from "discord.js";
+import type { Attachment, Message, TextChannel } from "discord.js";
 
 import { UnspecificError } from "~/util/Errors";
 import localize from "~/util/i18n/localize";
@@ -35,7 +35,7 @@ export default class AttachmentDownloader extends BaseDownloader {
       await this.fetchAndSaveSound(attachment);
 
       const name = attachment.name.split(".")[0];
-      message.channel.send(localize.t("commands.add.success", { name }));
+      (message.channel as TextChannel).send(localize.t("commands.add.success", { name }));
     }
   }
 

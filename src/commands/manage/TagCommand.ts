@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 import { getSounds } from "~/util/SoundUtil";
 import * as sounds from "~/util/db/Sounds";
@@ -14,14 +14,14 @@ export class TagCommand extends Command {
 
   public run(message: Message, params: string[]) {
     if (params.length < this.numberOfParameters) {
-      message.channel.send(this.usage);
+      (message.channel as TextChannel).send(this.usage);
       return;
     }
 
     // biome-ignore lint/style/noNonNullAssertion: verified params above
     const sound = params.shift()!;
     if (!getSounds().includes(sound)) {
-      message.channel.send(localize.t("commands.tag.notFound", { sound }));
+      (message.channel as TextChannel).send(localize.t("commands.tag.notFound", { sound }));
       return;
     }
 
